@@ -1,0 +1,27 @@
+web:
+  image: nginx:latest
+  ports:
+    - 8080:80
+  volumes:
+    - ./src:/src
+    - ./site.conf:/etc/nginx/conf.d/site.conf
+  links:
+    - php
+php:
+  build: .
+  volumes:
+    - ./src:/src
+  links:
+    - db:mysql
+db:
+  image: mysql:5.6
+  ports:
+        - 3306:3306
+  command: --sql-mode="ONLY_FULL_GROUP_BY,TRADITIONAL"
+  volumes:
+        - ./data/db/mysql:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_USER=ahaydar
+    - MYSQL_PASSWORD=password123
+
